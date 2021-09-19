@@ -1,0 +1,133 @@
+package render
+
+import (
+	"bytes"
+	"fmt"
+	"html/template"
+	"log"
+	"net/http"
+	"path/filepath"
+
+	"github.com/AdiF1/solidity/bookings/pkg/config"
+	"github.com/AdiF1/solidity/bookings/pkg/models"
+)
+
+// FuncMap is the type of the map defining the mapping from names to functions.
+var functions = template.FuncMap{
+
+}
+
+var app *config.AppConfig
+
+// NewTemplates sets the config for the template package
+func NewTemplates (a *config.AppConfig) {
+
+	app = a
+}
+
+// AddDefaultData allows app-wide info to be added to templates before rendering
+func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+	
+	return td
+}
+
+// renders templates using html/template
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
+
+	var tc map[string]*template.Template
+	if app.UseCache {
+		// production, so get the template cache from app config
+		tc = app.TemplateCache
+	} else {
+		// dev mode, sp rebuild template cache on every render
+		tc, _ = CreateTemplateCache()
+	}
+
+	// get the templateCache from app config
+	tc = app.TemplateCache
+	t, ok := tc[tmpl]
+	if !ok {
+		log.Fatal("Could not get template from template cache")
+	}
+
+	buff := new(bytes.Buffer)
+
+	td = AddDefaultData(td)
+
+	_ = t.Execute(buff, td)
+
+	_, err := buff.WriteTo(w)
+	if err != nil {
+		fmt.Println("Error writing template to browser", err)
+	}
+}
+// CreateTemplateCache creates a template cache as a map.
+// It's called in main.go
+func CreateTemplateCache() (map[string]*template.Template, error) {
+
+	myCache := map[string]*template.Template{}
+	
+	pages, err := filepath.Glob("./templates/*.page.html")
+
+	// the only error would be from a malformed pattern (ErrBadPattern)
+	if err != nil {
+		return myCache, err
+	}
+	// range through the templates
+	for _, page := range pages {
+
+		// Base returns the last element of path. Trailing path separators are removed before 
+		// extracting the last element. If the path is empty, Base returns ".". If the path 
+		// consists entirely of separators, Base returns a single separator.
+		
+		name := filepath.Base(page)
+
+		// New allocates a new HTML template with the given name.
+
+		// Funcs adds the elements of the argument map to the template's function map. 
+		// It must be called before the template is parsed. It panics if a value in the map 
+		// is not a function with appropriate return type. However, it is legal to 
+		// overwrite elements of the map. The return value is the template, so calls can be chained.
+
+		// ParseFiles parses the named files and associates the resulting templates with t. If 
+		// an error occurs, parsing stops and the returned template is nil; otherwise it is t. 
+		// There must be at least one file.
+
+		// create a template set
+		ts, err := template.New(name).Funcs(functions).ParseFiles(page)
+		if err != nil {
+			return myCache, err
+		}
+
+		layouts , err := filepath.Glob("./templates/*.layout.html")
+		if err != nil {
+			return myCache ,err
+		}
+		// MAYBE wrap the layout around each page before adding to ts
+		if len(layouts) >0 {
+			// ParseGlob parses the template definitions in the files identified by the pattern 
+			// and associates the resulting templates with t. The files are matched according to 
+			// the semantics of filepath.Match, and the pattern must match at least one file. 
+			// ParseGlob is equivalent to calling t.ParseFiles with the list of files matched by the pattern.
+			ts, err = ts.ParseGlob("./templates/*.layout.html")
+			if err != nil {
+				return myCache, err
+			}
+		}
+		myCache[name] = ts
+	}
+	return myCache, nil
+}
+
+
+/*_, err := RenderTemplateTest(w)
+	if err != nil {
+		fmt.Println("Error getting template cache", err)
+	}*/
+
+	/*parsedTemplate, _ := template.ParseFiles("./templates/" + tmpl)
+	err := parsedTemplate.Execute(w, nil)
+	if err != nil {
+		fmt.Println("error parsing template", err)
+		return
+	}*/
