@@ -10,7 +10,6 @@ import (
 	"github.com/AdiF1/solidity/bookings/pkg/handlers"
 	"github.com/AdiF1/solidity/bookings/pkg/render"
 	"github.com/alexedwards/scs/v2"
-
 )
 
 const portNumber = ":8080"
@@ -66,6 +65,8 @@ func main() {
 	err = srv.ListenAndServe()
 	log.Fatal(err)
 }
+
+// git push -u origin main
 
 
 
