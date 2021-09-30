@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/AdiF1/solidity/bookings/pkg/config"
-	"github.com/AdiF1/solidity/bookings/pkg/handlers"
+	"github.com/AdiF1/solidity/bookings/internal/config"
+	"github.com/AdiF1/solidity/bookings/internal/handlers"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )
@@ -23,6 +23,14 @@ func routes (app *config.AppConfig) http.Handler {
 
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
+	mux.Get("/contact", handlers.Repo.Contact)
+	mux.Get("/make-reservation", handlers.Repo.MakeReservation)
+	mux.Get("/search-availability", handlers.Repo.SearchAvailability)
+	mux.Post("/search-availability", handlers.Repo.PostSearchAvailability)
+	mux.Post("/search-availability-json", handlers.Repo.SearchAvailabilityJSON)
+	mux.Get("/esthers", handlers.Repo.Esthers)
+	mux.Get("/sanctuary", handlers.Repo.Sanctuary)
+
 
 	// FileServer returns a handler that serves HTTP requests with the contents 
 	// of the file system rooted at root.

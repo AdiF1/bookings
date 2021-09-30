@@ -8,8 +8,9 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/AdiF1/solidity/bookings/pkg/config"
-	"github.com/AdiF1/solidity/bookings/pkg/models"
+	"github.com/AdiF1/solidity/bookings/internal/config"
+	"github.com/AdiF1/solidity/bookings/internal/models"
+	"github.com/justinas/nosurf"
 )
 
 // FuncMap is the type of the map defining the mapping from names to functions.
@@ -26,13 +27,15 @@ func NewTemplates (a *config.AppConfig) {
 }
 
 // AddDefaultData allows app-wide info to be added to templates before rendering
-func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+
+	td.CSRFToken = nosurf.Token(r)
 	
 	return td
 }
 
 // renders templates using html/template
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 
 	var tc map[string]*template.Template
 	if app.UseCache {
@@ -52,7 +55,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 
 	buff := new(bytes.Buffer)
 
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 
 	_ = t.Execute(buff, td)
 

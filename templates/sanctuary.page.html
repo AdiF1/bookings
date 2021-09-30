@@ -1,0 +1,56 @@
+{{template "base" .}}
+
+{{define "content"}}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <img src="/static/images/sanctuary.png" class="img-fluid img-thumbnail room-image mx-auto d-block" alt = "room image">
+        </div>
+    </div>
+
+            
+<div class="row">
+    <div class="col">
+        <h2 class="text-center mt-4">The Sanctuary</h2>
+        <p>
+            The Gentle Barn started on a half-acre property in the middle of the San Fernando Valley, CA. 
+
+            In 2003 Ellie and Jay moved The Gentle Barn to a six-acre paradise in Santa Clarita, CA. The property is complete with large horse and cow pastures, a red and white barnyard for the smaller animals, an organic vegetable garden, lots of shade trees, and a panoramic view of gorgeous mountains. There are over one hundred and seventy rescued animals are safe and happy at The Gentle Barn, and there is plenty of room to welcome their visitors and the children they host. 
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col text-center">
+        
+        <a id="check-availability-button" href="#!" class = "btn btn-success">Check Availablility</a>
+    </div>
+</div>
+
+{{end}}
+
+{{define "js"}}
+<script>
+document.getElementById("check-availability-button").addEventListener("click", function(){
+    let html = `
+    <form id = "check-availability-form" action=" method="post" novalidate class="needs-validation2">
+      <div class="row">
+        <div class="col">
+          <div class="row" id="reservation-dates-modal">
+            <div class="col">
+              <input disabled class="form-control" type ="text" name="start" id="start" placeholder="Arrival">
+            </div>
+            <div class="col">
+              <input disabled class="form-control" type ="text" name="end" id="end" placeholder="Departure">
+            </div>
+          </div>
+        </div>
+      </div>      
+    </form>
+    `
+    attention.custom({msg: html, title: "Choose your dates"});
+})
+</script>
+
+{{end}}

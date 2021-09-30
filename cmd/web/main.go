@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/AdiF1/solidity/bookings/pkg/config"
-	"github.com/AdiF1/solidity/bookings/pkg/handlers"
-	"github.com/AdiF1/solidity/bookings/pkg/render"
+	"github.com/AdiF1/solidity/bookings/internal/config"
+	"github.com/AdiF1/solidity/bookings/internal/handlers"
+	"github.com/AdiF1/solidity/bookings/internal/render"
 	"github.com/alexedwards/scs/v2"
 )
 
