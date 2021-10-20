@@ -7,6 +7,9 @@
           margin-top: 2em;
           font-size: 80%;
       }
+      .my-nav-bar {
+        background-color: #163b65;
+    }
       .room-image {
           max-width: 50%;
       }

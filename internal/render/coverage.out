@@ -1,0 +1,23 @@
+mode: set
+github.com/AdiF1/solidity/bookings/internal/render/render.go:24.41,27.2 1 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:30.84,38.2 5 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:41.105,44.18 2 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:53.2,55.9 3 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:59.2,66.16 5 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:70.2,70.12 1 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:44.18,47.3 1 0
+github.com/AdiF1/solidity/bookings/internal/render/render.go:47.8,50.3 1 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:55.9,57.3 1 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:66.16,69.3 2 0
+github.com/AdiF1/solidity/bookings/internal/render/render.go:74.67,81.16 3 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:85.2,85.29 1 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:127.2,127.21 1 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:81.16,83.3 1 0
+github.com/AdiF1/solidity/bookings/internal/render/render.go:85.29,106.17 3 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:110.3,111.17 2 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:115.3,115.22 1 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:125.3,125.21 1 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:106.17,108.4 1 0
+github.com/AdiF1/solidity/bookings/internal/render/render.go:111.17,113.4 1 0
+github.com/AdiF1/solidity/bookings/internal/render/render.go:115.22,121.18 2 1
+github.com/AdiF1/solidity/bookings/internal/render/render.go:121.18,123.5 1 0

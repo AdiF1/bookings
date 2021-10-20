@@ -2,9 +2,9 @@ package render
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"path/filepath"
 
@@ -13,15 +13,15 @@ import (
 	"github.com/justinas/nosurf"
 )
 
-// FuncMap is the type of the map defining the mapping from names to functions.
-var functions = template.FuncMap{
+var pathToTemplates = "./templates"
 
-}
+// FuncMap is the type of the map defining the mapping from names to functions.
+var functions = template.FuncMap{}
 
 var app *config.AppConfig
 
-// NewTemplates sets the config for the template package
-func NewTemplates (a *config.AppConfig) {
+// NewRenderer sets the config for the template package
+func NewRenderer (a *config.AppConfig) {
 
 	app = a
 }
@@ -30,12 +30,15 @@ func NewTemplates (a *config.AppConfig) {
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
 
 	td.CSRFToken = nosurf.Token(r)
+	td.Flash = app.Session.PopString(r.Context(), "flash")
+	td.Error = app.Session.PopString(r.Context(), "error")
+	td.Warning = app.Session.PopString(r.Context(), "warning")
 	
 	return td
 }
 
-// renders templates using html/template
-func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
+// Template renders templates using html/template
+func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) error {
 
 	var tc map[string]*template.Template
 	if app.UseCache {
@@ -50,7 +53,7 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *mod
 	tc = app.TemplateCache
 	t, ok := tc[tmpl]
 	if !ok {
-		log.Fatal("Could not get template from template cache")
+		return errors.New("can't get template from cache")
 	}
 
 	buff := new(bytes.Buffer)
@@ -62,7 +65,9 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *mod
 	_, err := buff.WriteTo(w)
 	if err != nil {
 		fmt.Println("Error writing template to browser", err)
+		return err
 	}
+	return nil
 }
 // CreateTemplateCache creates a template cache as a map.
 // It's called in main.go
@@ -70,7 +75,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 
 	myCache := map[string]*template.Template{}
 	
-	pages, err := filepath.Glob("./templates/*.page.html")
+	pages, err := filepath.Glob(fmt.Sprintf("%s/*.page.html", pathToTemplates))
 
 	// the only error would be from a malformed pattern (ErrBadPattern)
 	if err != nil {
@@ -102,7 +107,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 			return myCache, err
 		}
 
-		layouts , err := filepath.Glob("./templates/*.layout.html")
+		layouts , err := filepath.Glob(fmt.Sprintf("%s/*.layout.html", pathToTemplates))
 		if err != nil {
 			return myCache ,err
 		}
@@ -112,7 +117,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 			// and associates the resulting templates with t. The files are matched according to 
 			// the semantics of filepath.Match, and the pattern must match at least one file. 
 			// ParseGlob is equivalent to calling t.ParseFiles with the list of files matched by the pattern.
-			ts, err = ts.ParseGlob("./templates/*.layout.html")
+			ts, err = ts.ParseGlob(fmt.Sprintf("%s/*.layout.html", pathToTemplates))
 			if err != nil {
 				return myCache, err
 			}

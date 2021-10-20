@@ -1,0 +1,22 @@
+mode: set
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:25.47,29.2 1 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:32.34,34.2 1 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:40.67,53.2 5 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:56.68,69.2 6 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:71.70,73.2 1 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:75.81,77.2 1 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:85.85,93.15 3 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:96.2,97.14 2 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:93.15,95.2 1 0
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:101.85,105.2 3 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:107.74,116.2 4 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:118.78,120.16 2 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:125.2,140.19 6 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:151.2,153.66 2 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:120.16,123.3 2 0
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:140.19,148.3 4 0
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:156.70,158.2 1 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:160.72,162.2 1 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:164.81,167.9 2 1
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:174.2,181.4 4 0
+github.com/AdiF1/solidity/bookings/internal/handlers/handlers.go:167.9,172.3 4 1
