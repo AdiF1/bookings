@@ -66,12 +66,12 @@
             },
             callback: function(result) {
                 console.log("called");
-
+    
                 let form = document.getElementById("check-availability-form")
                 let formData = new FormData(form)
                 formData.append("csrf_token", "{{.CSRFToken}}")
                 formData.append("room_id", "1")
-
+    
                 fetch('/search-availability-json', {
                     method: "post",
                     body: formData,
@@ -101,5 +101,5 @@
             }
         });
     })
-</script>
-{{end}}
+    </script>
+    {{end}}

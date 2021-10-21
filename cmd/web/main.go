@@ -96,6 +96,14 @@ func run() (*driver.DB, error) {
 }
 
 /* 
+Test all from root folder:
+go test -v ./...
+
+In package: 
+go test -v
+go test -cover
+go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+
 
 git push -u origin main
 ./run.sh
