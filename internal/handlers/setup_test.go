@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"testing"
 	"time"
 
 	"github.com/AdiF1/solidity/bookings/internal/config"
@@ -24,7 +25,7 @@ var session *scs.SessionManager
 var pathToTemplates = "./../../templates"
 var functions = template.FuncMap{}
 
-func getRoutes() http.Handler {
+func TestMain(m *testing.M) {
 	// what am I going to put in the session?
 	gob.Register(models.Reservation{})
 
@@ -54,11 +55,18 @@ func getRoutes() http.Handler {
 	// SET TRUE FOR PRODUCTION
 	app.UseCache = true
 	// calls a func to create a new repository
-	repo := NewRepo(&app)
+	repo := NewTestRepo(&app)
 	// calls a func to set the repository for the handlers
 	NewHandlers(repo)
 	// calls a func to set the repository for the handlers
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
+
+	os.Exit(m.Run())
+
+}
+
+func getRoutes() http.Handler {
+	
 
 	// ---------------------------------
 

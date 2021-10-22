@@ -19,7 +19,7 @@ var theTests = []struct {
 	params             []postData
 	expectedStatusCode int
 }{
-	{"home", "/", "GET", []postData{}, http.StatusOK},
+/* 	{"home", "/", "GET", []postData{}, http.StatusOK},
 	{"about", "/about", "GET", []postData{}, http.StatusOK},
 	{"esthers", "/esthers", "GET", []postData{}, http.StatusOK},
 	{"sanc", "/sanctuary", "GET", []postData{}, http.StatusOK},
@@ -39,7 +39,7 @@ var theTests = []struct {
 	{"post-search-avail-json", "/search-availability-json", "POST", []postData{
 		{key: "start", value: "2021-01-01"},
 		{key: "end", value: "2021-01-02"},
-	}, http.StatusOK},
+	}, http.StatusOK}, */
 }
 
 func TestHandlers(t *testing.T) {
@@ -77,3 +77,4 @@ func TestHandlers(t *testing.T) {
 		}
 	}
 }
+

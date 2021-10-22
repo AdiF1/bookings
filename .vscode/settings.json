@@ -3,6 +3,7 @@
     "editor.fontFamily": "JetBrains Mono",
     "editor.fontSize": 14,
     "cSpell.words": [
+        "dbrepo",
         "govalidator"
     ]
 }

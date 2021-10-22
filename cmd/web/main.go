@@ -104,12 +104,15 @@ go test -v
 go test -cover
 go test -coverprofile=coverage.out && go tool cover -html=coverage.out
 
-
+Commit to GitHub:
 git push -u origin main
+
+Run all non-test files with z sript:
 ./run.sh
 
+Create migrations:
 soda reset
-soda generate fizz (file name)
+soda generate fizz(sql) (file name)
 soda migrate 
 
 */
