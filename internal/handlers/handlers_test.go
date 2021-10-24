@@ -5,6 +5,8 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"testing"
+
+	"github.com/AdiF1/solidity/bookings/internal/models"
 )
 
 type postData struct {
@@ -76,5 +78,23 @@ func TestHandlers(t *testing.T) {
 
 		}
 	}
+}
+
+func TestRepository_Reservation(t *testing.T) {
+	reservation := models.Reservation{
+		RoomID:	1,
+		Room:	models.Room{
+			ID: 1,
+			RoomName: "Esther's Place",
+		},
+	}
+
+	req, _ ;+ http.NewRequest("Get", "/make-reservation", nil)
+
+}
+
+
+func getCtx(req *http.Request) context.Context{
+
 }
 
