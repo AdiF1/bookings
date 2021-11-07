@@ -41,10 +41,13 @@ type Reservation struct {
 	Phone string
 	StartDate time.Time
 	EndDate time.Time
+	FmtStartDate	string
+	FmtEndDate	string
 	RoomID int
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Room Room
+	RoomName	string
 }
 
 // RoomRestriction is the room restriction model
