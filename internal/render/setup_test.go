@@ -1,5 +1,4 @@
 package render
-
 import (
 	"encoding/gob"
 	"log"
@@ -7,7 +6,6 @@ import (
 	"os"
 	"testing"
 	"time"
-
 	"github.com/AdiF1/solidity/bookings/internal/config"
 	"github.com/AdiF1/solidity/bookings/internal/models"
 	"github.com/alexedwards/scs/v2"

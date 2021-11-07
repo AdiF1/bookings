@@ -3,11 +3,6 @@ package main
 import (
 	"encoding/gob"
 	"fmt"
-	"log"
-	"net/http"
-	"os"
-	"time"
-
 	"github.com/AdiF1/solidity/bookings/helpers"
 	"github.com/AdiF1/solidity/bookings/internal/config"
 	"github.com/AdiF1/solidity/bookings/internal/handlers"
@@ -15,6 +10,10 @@ import (
 	"github.com/AdiF1/solidity/bookings/internal/render"
 	"github.com/AdiF1/solidity/bookings/internal/driver"
 	"github.com/alexedwards/scs/v2"
+	"log"
+	"net/http"
+	"os"
+	"time"
 )
 
 const portNumber = ":8080"
@@ -32,7 +31,11 @@ func main() {
 	}
 	defer db.SQL.Close()
 
-	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
+	// Mail channel 
+	defer close(app.MailChan)
+	fmt.Println("Starting mail listener...")
+	listenForMail()
+	fmt.Println(fmt.Sprintf("Starting application on port %s", portNumber))
 
 	srv := &http.Server{
 		Addr:    portNumber,
@@ -51,6 +54,9 @@ func run() (*driver.DB, error) {
 	gob.Register(models.User{})
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
+
+	mailChan := make(chan models.MailData)
+	app.MailChan = mailChan
 
 	// change this to true when in production
 	app.InProduction = false
@@ -97,23 +103,26 @@ func run() (*driver.DB, error) {
 
 /* 
 Test all from root folder:
-go test -v ./...
+-	go test -v ./...
 
 In package: 
-go test -v
-go test -cover
-go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+-	go test -v
+-	go test -cover
+-	go test -coverprofile=coverage.out && go tool cover -html=coverage.out
 
 Commit to GitHub:
-git push -u origin main
+-	git push -u origin main
 
 Run all non-test files with z sript:
-./run.sh
+-	./run.sh
 
 Create migrations:
-soda reset
-soda generate fizz(sql) (file name)
-soda migrate 
+-	soda reset
+-	soda generate fizz(sql) (file name)
+-	soda migrate 
+
+Auto fill struct:
+-	cmd shift p -> Go: Fill struct
 
 */
 

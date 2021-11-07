@@ -1,10 +1,10 @@
 package render
-
 import (
 	"bytes"
 	"errors"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"path/filepath"
 
@@ -13,16 +13,14 @@ import (
 	"github.com/justinas/nosurf"
 )
 
-var pathToTemplates = "./templates"
-
 // FuncMap is the type of the map defining the mapping from names to functions.
 var functions = template.FuncMap{}
 
 var app *config.AppConfig
+var pathToTemplates = "./templates"
 
 // NewRenderer sets the config for the template package
 func NewRenderer (a *config.AppConfig) {
-
 	app = a
 }
 
@@ -33,7 +31,6 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 	td.Flash = app.Session.PopString(r.Context(), "flash")
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.Warning = app.Session.PopString(r.Context(), "warning")
-	
 	return td
 }
 
@@ -50,7 +47,7 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 	}
 
 	// get the templateCache from app config
-	tc = app.TemplateCache
+	//tc = app.TemplateCache
 	t, ok := tc[tmpl]
 	if !ok {
 		return errors.New("can't get template from cache")
@@ -60,9 +57,11 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 
 	td = AddDefaultData(td, r)
 
-	_ = t.Execute(buff, td)
-
-	_, err := buff.WriteTo(w)
+	err := t.Execute(buff, td)
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = buff.WriteTo(w)
 	if err != nil {
 		fmt.Println("Error writing template to browser", err)
 		return err
@@ -112,7 +111,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 			return myCache ,err
 		}
 		// MAYBE wrap the layout around each page before adding to ts
-		if len(layouts) >0 {
+		if len(layouts) > 0 {
 			// ParseGlob parses the template definitions in the files identified by the pattern 
 			// and associates the resulting templates with t. The files are matched according to 
 			// the semantics of filepath.Match, and the pattern must match at least one file. 

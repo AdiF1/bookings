@@ -1,14 +1,11 @@
 package dbrepo
-
 import (
 	"context"
 	"time"
-
 	"github.com/AdiF1/solidity/bookings/internal/models"
 )
 
 func (m *postgresDBRepo) AllUsers() bool {
-
 	return true
 }
 
@@ -40,7 +37,6 @@ func (m *postgresDBRepo) InsertReservation(res models.Reservation) (int, error) 
 	}
 
 	return newID, nil
-
 }
 
 // InsertRoomRestriction inserts a room restriction into the db
@@ -56,10 +52,11 @@ func(m *postgresDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 			r.EndDate,
 			r.RoomID,
 			r.ReservationID,
-			r.CreatedAt,
-			r.UpdatedAt,
+			time.Now(),
+			time.Now(),
 			r.RestrictionID,
 		)
+
 		if err != nil {
 			return err
 		}
@@ -83,12 +80,10 @@ func (m *postgresDBRepo) SearchAvailabilityByDatesAndRoomID(start, end time.Time
 
 	row := m.DB.QueryRowContext(ctx, query, roomID, start, end)
 	err := row.Scan(&numRows)
-
 	if err != nil {
 		return false, err
 	}
 	
-
 	if numRows == 0 {
 		return true, nil
 	}
@@ -126,7 +121,6 @@ func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]
 		if err != nil {
 			return rooms, err
 		}
-
 		rooms = append(rooms, room)
 	}
 
@@ -141,6 +135,7 @@ func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]
 func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
+	
 	var room models.Room
 
 	query := `

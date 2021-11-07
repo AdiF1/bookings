@@ -2,10 +2,10 @@ package helpers
 
 import (
 	"fmt"
-	"math/rand"
+	//"math/rand"
 	"net/http"
 	"runtime/debug"
-	"time"
+	//"time"
 
 	"github.com/AdiF1/solidity/bookings/internal/config"
 )
@@ -29,13 +29,12 @@ func ServerError(w http.ResponseWriter, err error) {
 
 }
 
-// packages
-	type SomeType struct {
+// packages and channels
+	/* type SomeType struct {
 		TypeName string
 	}
-// channels
 	func RandomNumber(n int) int {
 		rand.Seed(time.Now().Unix())
 		value := rand.Intn(n)
 		return value
-	}
+	} */

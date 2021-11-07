@@ -1,5 +1,4 @@
 package handlers
-
 import (
 	"encoding/gob"
 	"fmt"
@@ -67,9 +66,6 @@ func TestMain(m *testing.M) {
 
 func getRoutes() http.Handler {
 	
-
-	// ---------------------------------
-
 	mux := chi.NewRouter()
 
 	mux.Use(middleware.Recoverer)
@@ -99,9 +95,7 @@ func getRoutes() http.Handler {
 	return mux
 }
 
-	// --------------------------
-
-	// NoSurf adds CSRF protection to all POST requests
+// NoSurf adds CSRF protection to all POST requests
 func NoSurf(next http.Handler) http.Handler {
 	csrfHandler := nosurf.New(next)
 

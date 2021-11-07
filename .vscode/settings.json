@@ -1,9 +1,9 @@
 {
     "editor.fontWeight": "400",
     "editor.fontFamily": "JetBrains Mono",
-    "editor.fontSize": 14,
     "cSpell.words": [
         "dbrepo",
         "govalidator"
-    ]
+    ],
+    "editor.fontSize": 14
 }
