@@ -20,7 +20,7 @@ function Prompt() {
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         })
-
+        // ??
         Toast.fire({})
     }
 
@@ -78,12 +78,6 @@ function Prompt() {
                 if (c.didOpen != undefined) {
                     c.didOpen();
                 }
-            },
-            preConfirm: () => {
-                return [
-                    document.getElementById('start').value,
-                    document.getElementById('end').value
-                ]
             }
         })
 

@@ -2,18 +2,21 @@ package main
 
 import (
 	"encoding/gob"
+	"flag"
 	"fmt"
-	"github.com/AdiF1/solidity/bookings/helpers"
-	"github.com/AdiF1/solidity/bookings/internal/config"
-	"github.com/AdiF1/solidity/bookings/internal/handlers"
-	"github.com/AdiF1/solidity/bookings/internal/models"
-	"github.com/AdiF1/solidity/bookings/internal/render"
-	"github.com/AdiF1/solidity/bookings/internal/driver"
-	"github.com/alexedwards/scs/v2"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/AdiF1/solidity/bookings/helpers"
+	"github.com/AdiF1/solidity/bookings/internal/config"
+	"github.com/AdiF1/solidity/bookings/internal/driver"
+	"github.com/AdiF1/solidity/bookings/internal/handlers"
+	"github.com/AdiF1/solidity/bookings/internal/models"
+	"github.com/AdiF1/solidity/bookings/internal/render"
+	"github.com/alexedwards/scs/v2"
+	//"golang.org/x/crypto/bcrypt"
 )
 
 const portNumber = ":8080"
@@ -25,6 +28,12 @@ var errorLog *log.Logger
 
 // main is the main function
 func main() {
+
+	/* password := "password"
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
+	log.Println(string(hashedPassword)) */
+
+
 	db, err := run()
 	if err != nil {
 		log.Fatal(err)
@@ -54,12 +63,33 @@ func run() (*driver.DB, error) {
 	gob.Register(models.User{})
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
+	gob.Register(map[string]int{})
+
+	// read flags
+	inProduction := flag.Bool("production", true, "Application is in production")
+	useCache := flag.Bool("cache", true, "Use template cache")
+	dbHost := flag.String("db_host", "localhost", "DB host")
+	dbName := flag.String("db_name", "", "DB name")
+	dbUser := flag.String("db_user", "", "DB user")
+	dbPass := flag.String("db_pwd", "", "DB password")
+	dbPort := flag.String("db_port", "5432", "DB port")
+	dbSSL := flag.String("db_ssl", "disable", "DB SSL settings (disable, prefer, require)")
+
+	flag.Parse()
+
+	if *dbName == "" || *dbUser == "" {
+		fmt.Println("Missing required flags")
+		os.Exit(1)
+	}
+
+
 
 	mailChan := make(chan models.MailData)
 	app.MailChan = mailChan
 
 	// change this to true when in production
-	app.InProduction = false
+	app.InProduction = *inProduction
+	app.UseCache = *useCache
 
 	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	app.InfoLog = infoLog
@@ -77,8 +107,10 @@ func run() (*driver.DB, error) {
 	app.Session = session
 
 	// connect to database
+	connectionString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=%s", 
+									*dbHost, *dbPort, *dbName, *dbUser, *dbPass, *dbSSL)
 	log.Println("Connecting to database...")
-	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings2 user=ms password=")
+	db, err := driver.ConnectSQL(connectionString)
 	if err != nil {
 		log.Fatal("Cannot connect to database! Dying...")
 	}
@@ -91,7 +123,6 @@ func run() (*driver.DB, error) {
 	}
 
 	app.TemplateCache = tc
-	app.UseCache = false
 
 	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
@@ -102,6 +133,15 @@ func run() (*driver.DB, error) {
 }
 
 /* 
+Port conflict issue:
+
+Sessions: https://github.com/alexedwards/scs
+
+ms@MBP14inch2021 bookings % lsof -i :8080              
+COMMAND    PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+bookings 64003   ms    9u  IPv6 0xcfa7a0d7fffbbf73      0t0  TCP *:http-alt (LISTEN)
+ms@MBP14inch2021 bookings % kill -9 64003
+
 Test all from root folder:
 -	go test -v ./...
 
@@ -123,6 +163,20 @@ Create migrations:
 
 Auto fill struct:
 -	cmd shift p -> Go: Fill struct
+
+https://cloud.linode.com/linodes
+https://caddyserver.com/docs/install
+
+root@139.177.199.26
+Wo
+adf@139.177.199.26
+Wa
+
+:wq<Return>
+
+
+
+
 
 */
 

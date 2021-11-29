@@ -90,3 +90,96 @@ func (m *testDBRepo) GetRoomByID(id int) (models.Room, error) {
 	}
 	return room, nil
 }
+
+
+func (m *testDBRepo) GetUserByID(id int) (models.User, error) {
+	var usr models.User
+
+	return usr, nil
+}
+
+
+func (m *testDBRepo) UpdateUser(usr models.User) error {
+
+	return nil
+
+}
+
+
+func (m *testDBRepo) Authenticate(email, testPassword string) (int, string, error) {
+	if email == "a@d.ca" {
+		return 0, "", nil 
+	}
+	return 0, "", errors.New("some error")
+
+}
+
+// AllReservations returns a slice of all reservations
+func (m *testDBRepo) AllReservations() ([]models.Reservation, error) {
+
+	var reservations []models.Reservation
+
+	return reservations, nil
+}
+
+// AllNewReservations returns a slice of all NEW reservations
+func (m *testDBRepo) AllNewReservations() ([]models.Reservation, error) {
+
+	var reservations []models.Reservation
+
+	return reservations, nil
+}
+
+// GetReservationByID returns one reservation by ID
+func (m *testDBRepo) GetReservationByID(id int) (models.Reservation, error) {
+
+	var res models.Reservation
+
+	return res, nil
+}
+
+// UpdateReservation updates a user in the database
+func (m *testDBRepo) UpdateReservation(usr models.Reservation) error {
+
+	return nil
+}
+
+// DeleteReservation removes a reservation by id from the database
+func (m *testDBRepo) DeleteReservation(id int) error {
+
+	return nil
+}
+
+// UpdateProcessedForReservation toggles processed status for a reservation by id
+func (m *testDBRepo) UpdateProcessedForReservation(id, processedStatus int) error {
+
+	return nil
+}
+
+// AllRooms returns a list of all rooms
+func (m *testDBRepo) AllRooms() ([]models.Room, error) {
+
+	var rooms []models.Room
+
+	return rooms, nil
+}
+
+// GetRestrictionsForRoomByDate returns restrictions for a room by date range
+func (m *testDBRepo) GetRestrictionsForRoomByDate(roomID int, start, end time.Time) ([]models.RoomRestriction, error) {
+
+	var restrictions []models.RoomRestriction
+
+		return restrictions, nil
+}
+
+// InsertBlockForRoom inserts a room restriction
+func (m *testDBRepo) InsertBlockForRoom(id int, startDate time.Time) error {
+
+	return nil
+}
+
+// DeleteBlockByID deletes a room restriction
+func (m *testDBRepo) DeleteBlockByID(id int) error {
+
+	return nil
+}

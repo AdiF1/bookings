@@ -36,6 +36,27 @@ func routes (app *config.AppConfig) http.Handler {
 	mux.Post("/make-reservation", handlers.Repo.PostReservation)
 	mux.Get("/reservation-summary", handlers.Repo.ReservationSummary)
 
+	mux.Get("/user/login", handlers.Repo.ShowLogin)
+	mux.Post("/user/login", handlers.Repo.PostShowLogin)
+	mux.Get("/user/logout", handlers.Repo.Logout)
+
+	mux.Route("/admin", func(mux chi.Router){
+		// ADF
+		//mux.Use(Auth)
+		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
+		mux.Get("/reservations-new", handlers.Repo.AdminNewReservations)
+		mux.Get("/reservations-all", handlers.Repo.AdminAllReservations)
+		mux.Get("/reservations-calendar", handlers.Repo.AdminReservationsCalendar)
+		mux.Post("/reservations-calendar", handlers.Repo.AdminPostReservationsCalendar)
+		mux.Get("/process-reservation/{src}/{id}/do", handlers.Repo.AdminProcessReservation)
+		mux.Get("/delete-reservation/{src}/{id}/do", handlers.Repo.AdminDeleteReservation)
+		mux.Get("/reservations/{src}/{id}/show", handlers.Repo.AdminShowReservation)
+		mux.Post("/reservations/{src}/{id}", handlers.Repo.AdminPostShowReservation)
+	})
+
+
+
+
 	// FileServer returns a handler that serves HTTP requests with the contents 
 	// of the file system rooted at root.
 

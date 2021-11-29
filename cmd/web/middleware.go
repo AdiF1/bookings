@@ -2,6 +2,8 @@ package main
 
 import (
 	"net/http"
+
+	"github.com/AdiF1/solidity/bookings/helpers"
 	"github.com/justinas/nosurf"
 )
 
@@ -23,6 +25,17 @@ func SessionLoad(next http.Handler) http.Handler {
 	// and saves session data for the current request, and communicates 
 	// the session token to and from the client in a cookie.
 	return session.LoadAndSave(next)
+}
+
+func Auth(next http.Handler) http.Handler {
+	return http.HandlerFunc(func (w http.ResponseWriter, r *http.Request)  {
+		if !helpers.IsAuthenticated(r) {
+			session.Put(r.Context(), "error", "Log in first!")
+			http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 // func WriteToConsole(next http.Handler) http.Handler {
