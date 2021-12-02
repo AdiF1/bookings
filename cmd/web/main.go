@@ -174,6 +174,12 @@ Wa
 
 :wq<Return>
 
+sudo service postgresql start
+
+go build -o bookings cmd/web/*.go
+
+adf@localhost:/var/www/book$ ./update.sh
+
 
 
 
