@@ -88,6 +88,8 @@
           <li class="nav-item">
             <a class="nav-link" href="/about">About</a>
           </li>
+
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Rooms
@@ -97,17 +99,19 @@
                 <a class="dropdown-item" href="/sanctuary">Sanctuary Suite</a>
             </ul>
           </li>
+
+
           <li class="nav-item">
             <a class="nav-link" href="/search-availability">Book Now</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/contact">Contact</a>
         </li>
-        <li class="nav-item">
+        <!-- A D M I N -->
+        <li class="nav-item dropdown">
             {{if eq .IsAuthenticated 1}}
-                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -117,6 +121,7 @@
                 </li>
             {{else}}
                 <a class="nav-link" href="/user/login">Log In</a>
+                </li>
             {{end}}
         </ul>
         

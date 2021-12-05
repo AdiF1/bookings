@@ -176,16 +176,64 @@ Wa
 
 sudo service postgresql start
 
+cd bookings
+git pull
+
+adf@localhost:/etc/postgresql/13/main$ ps ax | grep postgr
+
 go build -o bookings cmd/web/*.go
 
 adf@localhost:/var/www/book$ ./update.sh
 
 adf@localhost:~$ ps ax | grep supervisorctl
 
+Caddyfile:
 
+{
+        email   adifletcher@mac.com
+}
 
+(static) {
+        file
+        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.json
+        }
 
-*/
+        header @static Cache-Control max-age=51840000
+}
+
+(security) {
+        header {
+                # enable HSTS
+                Strict-Transport-Security max-age=315360000
+                # disbale cleints from sniffing header types
+                X-Content-Type-Options nosniff
+                # keep referrer data off of HTTP connections
+                Referrer-Policy no-referrer-when-downgrade
+        }
+}
+
+import conf.d/*.conf
+
+sudo tail -f /var/log/syslog
+
+/* package main
+
+import (
+	"fmt"
+	"log"
+
+	"github.com/ethereum/go-ethereum/ethclient"
+)
+
+func openClient() {
+	client, err := ethclient.Dial("https://mainnet.infura.io") 
+	if err != nil {
+		log.Fatal(err) 
+	}
+	fmt.Println("we have a connection")
+	_ = client // we'll use this in the upcoming sections 
+} */
+
 
 
 /* 	smallCHANGE 
