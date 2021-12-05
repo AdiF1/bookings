@@ -1,4 +1,4 @@
-package main
+/* package main
 
 import (
 	"fmt"
@@ -14,4 +14,4 @@ func openClient() {
 	}
 	fmt.Println("we have a connection")
 	_ = client // we'll use this in the upcoming sections 
-}
+} */

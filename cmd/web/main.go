@@ -180,6 +180,7 @@ go build -o bookings cmd/web/*.go
 
 adf@localhost:/var/www/book$ ./update.sh
 
+adf@localhost:~$ ps ax | grep supervisorctl
 
 
 
