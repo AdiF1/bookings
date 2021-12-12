@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/AdiF1/solidity/bookings/ether"
 	"github.com/AdiF1/solidity/bookings/helpers"
 	"github.com/AdiF1/solidity/bookings/internal/config"
 	"github.com/AdiF1/solidity/bookings/internal/driver"
@@ -16,6 +17,7 @@ import (
 	"github.com/AdiF1/solidity/bookings/internal/models"
 	"github.com/AdiF1/solidity/bookings/internal/render"
 	"github.com/alexedwards/scs/v2"
+	"github.com/ethereum/go-ethereum/accounts/keystore"
 	//"golang.org/x/crypto/bcrypt"
 )
 
@@ -33,6 +35,15 @@ func main() {
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
 	log.Println(string(hashedPassword)) */
 
+	//etherNet()
+	//etherAddress()
+
+	
+	//account_balance.etherAccountBalances()
+	//generateWallet()
+	
+	//createKs() 
+	//address_check()
 
 	db, err := run()
 	if err != nil {
@@ -56,6 +67,7 @@ func main() {
 		log.Fatal(err)
 	}
 }
+
 
 func run() (*driver.DB, error) {
 	// what am I going to put in the session
@@ -215,24 +227,6 @@ Caddyfile:
 import conf.d/*.conf
 
 sudo tail -f /var/log/syslog
-
-/* package main
-
-import (
-	"fmt"
-	"log"
-
-	"github.com/ethereum/go-ethereum/ethclient"
-)
-
-func openClient() {
-	client, err := ethclient.Dial("https://mainnet.infura.io") 
-	if err != nil {
-		log.Fatal(err) 
-	}
-	fmt.Println("we have a connection")
-	_ = client // we'll use this in the upcoming sections 
-} */
 
 
 
