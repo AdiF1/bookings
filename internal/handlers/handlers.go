@@ -1,14 +1,20 @@
 package handlers
 
 import (
+
+	//"crypto/ecdsa"
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/big"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/AdiF1/solidity/bookings/contracts"
+	"github.com/AdiF1/solidity/bookings/ether"
 	"github.com/AdiF1/solidity/bookings/helpers"
 	"github.com/AdiF1/solidity/bookings/internal/config"
 	"github.com/AdiF1/solidity/bookings/internal/driver"
@@ -18,6 +24,11 @@ import (
 	"github.com/AdiF1/solidity/bookings/internal/repository"
 	"github.com/AdiF1/solidity/bookings/internal/repository/dbrepo"
 	"github.com/go-chi/chi"
+
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
+	//"github.com/ethereum/go-ethereum/crypto"
 )
 
 // Repo the repository used by the handlers
@@ -50,9 +61,9 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "home.page.html", &models.TemplateData{})
 }
 // About is the about page handler
-func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
+func (m *Repository) Smallchange(w http.ResponseWriter, r *http.Request) {
 	// send the data to the template
-	render.Template(w, r, "about.page.html", &models.TemplateData{})
+	render.Template(w, r, "smallchange.page.html", &models.TemplateData{})
 }
 // Reservation renders the make a reservation page and displays form
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
@@ -74,10 +85,15 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	res.FmtEndDate = res.EndDate.Format("2006-01-02")
 	res.RoomName = room.RoomName
 
+	token := ether.ContractReadERC20()
+
 	data := make(map[string]interface{})
 	data["reservation"] = res
+	data["token"] = token
 
 	m.App.Session.Put(r.Context(), "reservation", res)
+
+
 
 	render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
 		Form:      forms.New(nil),
@@ -345,6 +361,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 }
 // ChooseRoom displays list of available rooms
 func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
+	
 	// used to have next 6 lines
 	//roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
 	//if err != nil {
@@ -804,3 +821,103 @@ func (m *Repository) AdminPostReservationsCalendar(w http.ResponseWriter, r *htt
 	m.App.Session.Put(r.Context(), "flash", "Changes saved")
 	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-calendar?y=%d&m=%d", year, month), http.StatusSeeOther)
 }
+
+// ---------------------------------------------------------------------------------------------
+
+// Smallchange renders the Metamask info page
+func (m *Repository) PostSmallchange(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse form!")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	account := r.Form.Get("eth_account")
+
+	data := make(map[string]interface{})
+	data["eth-account"] = account
+	log.Println("account: ", account)
+
+	BaseCampaignDeploy(account)
+
+	render.Template(w, r, "metamask-info.page.html", &models.TemplateData{
+		Data: data,
+	})
+}
+
+func BaseCampaignDeploy(_account string) {
+	//call SetUpParams() in smart.go
+	client, _, nonce := ether.SetUpParams("https://rinkeby.infura.io/v3/9c8598071c5f4e9483ec92a18cbccbb5", "94851db7c06aa833f3d34217e0eac7f467f5010f9a79bb9d193e14d9b23688f7")
+
+	client, err := ethclient.Dial("https://rinkeby.infura.io/v3/9c8598071c5f4e9483ec92a18cbccbb5")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//chainID, err := client.ChainID(context.Background())
+	//if err != nil {
+		//panic(err)
+	//}
+
+	//auth, err := bind.NewKeyedTransactorWithChainID(privateKey, chainID)
+	//if err != nil {
+		//log.Fatal(err)
+	//}
+
+	gasPrice, err := client.SuggestGasPrice(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//auth.Nonce = big.NewInt(int64(nonce))
+	//auth.Value = big.NewInt(0)
+	//auth.GasLimit = uint64(3000000)
+	//auth.GasPrice = gasPrice
+	//auth.Nonce = big.NewInt(int64(nonce))
+
+	initValue := big.NewInt(10)
+	//publicKey := privateKey.Public()
+	//pubKey := crypto.CreateAddress("0x2355B93c4551a235315e14c1e76AcDDe0Bfcc4C9", nonce)
+	//publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+	//if !ok {
+		//log.Fatal("cannot assert type: publicKey is not of type *ecdsa.PublicKey")
+	//}
+	//fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+
+	fromAddress := common.HexToAddress("0x2355B93c4551a235315e14c1e76AcDDe0Bfcc4C9")
+
+	auth2 := bind.TransactOpts {
+		From: fromAddress,
+		Nonce : big.NewInt(int64(nonce)),
+		Signer: nil,
+		Value: big.NewInt(0),
+		GasPrice: gasPrice,
+		GasFeeCap: nil,
+		GasTipCap: nil,
+		GasLimit: uint64(3000000),
+	}
+
+	address, _, _, err := adf2.DeployBaseCampaign(&auth2, client, initValue)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("\n\ncontract address: ", address.Hex())
+}
+
+/* type TransactOpts struct {
+	From   common.Address // Ethereum account to send the transaction from
+	Nonce  *big.Int       // Nonce to use for the transaction execution (nil = use pending state)
+	Signer SignerFn       // Method to use for signing the transaction (mandatory)
+
+Value     *big.Int // Funds to transfer along the transaction (nil = 0 = no funds)
+GasPrice  *big.Int // Gas price to use for the transaction execution (nil = gas price oracle)
+	GasFeeCap *big.Int // Gas fee cap to use for the 1559 transaction execution (nil = gas price oracle)
+	GasTipCap *big.Int // Gas priority fee cap to use for the 1559 transaction execution (nil = gas price oracle)
+GasLimit  uint64   // Gas limit to set for the transaction execution (0 = estimate)
+
+	Context context.Context // Network context to support cancellation and timeouts (nil = no timeout)
+
+	NoSend bool // Do all transact steps but do not send the transaction
+} */

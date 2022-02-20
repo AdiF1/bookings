@@ -32,5 +32,6 @@
   "author": "bootstrapdash",
   "url": "http://www.bootstrapdash.com/",
   "copyright": "",
-  "license": ""
+  "license": "",
+  "type": "module"
 }

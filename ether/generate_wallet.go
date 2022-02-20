@@ -10,7 +10,7 @@ import (
     "golang.org/x/crypto/sha3"
 )
 
-func generateWallet() {
+func GenerateWallet() {
     // import the go-ethereum crypto package that provides the GenerateKey method for 
 	// generating a random private key.
 	privateKey, err := crypto.GenerateKey()

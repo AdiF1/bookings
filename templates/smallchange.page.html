@@ -1,0 +1,136 @@
+
+{{template "base" .}}
+
+
+{{define "content"}}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h2 class="mt-3">SmallCHANGE DAO</h2>
+                <br>
+
+                <form action="/smallchange" method="post" novalidate class="needs-validation">
+                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
+                    <input type="hidden" name="eth_account" id="current_eth_account" value="help me!">
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="row" id="reservation-dates">
+                                <div class="col-md-6">
+                                    <input  class="form-control" type="text" name="campaign" placeholder="Campaign">
+                                </div>
+                                <div class="col-md-6">
+                                    <input  class="form-control" type="text" name="amount" placeholder="Amount">
+                                </div><div class="col-md-6">
+                                    <input  class="form-control" type="text" name="amount" value="activateEth()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Contribute</button>
+                </form>
+                <br>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+    </div>
+    <h4>My account: <span id="myText"></span></h4>
+    <a href="#" onclick="Transact()">Transact</a>
+
+    <a href="#" onclick="Contribute()">Contribute</a>
+
+{{end}}
+
+{{define "js"}}
+
+<script>
+
+    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+
+        async function onInit() {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            Account = accounts[0];
+            document.getElementById("myText").innerHTML = accounts[0];
+            document.getElementById("current_eth_account").value = accounts[0];
+
+            window.ethereum.on('accountsChanged', function (accounts) {
+                console.log(accounts[0]);
+                document.getElementById("myText").innerHTML = accounts[0];
+                document.getElementById("current_eth_account").value = accounts[0];
+            });
+        }
+        onInit();
+    } else {
+        console.log("no MetaMask detected");
+        alert("Unfortunately you will not be able to interact with the Ethereum Blockchain as no MetaMask exists with your browser.\n\nPlease try using Chrome or Opera with the MetaMask extension.");
+    }
+
+    async function Transact() {
+        console.log("in Transact!");
+        var txParameters = {
+            nonce: '0x00',
+            to: '0x8D7325Ef5dCc16363D6703e967cE39E3801cAa01',
+            from: '0x2355B93c4551a235315e14c1e76AcDDe0Bfcc4C9',
+            value: '1234567890000000', // 2441406250
+            chainID: '0x3',
+            //gas: '30400', // 30400
+            //gasPrice: '10000000000000', // 10000000000000
+            
+            //data: ""
+        };
+
+
+        await ethereum.request({ method: 'eth_sendTransaction', params: [txParameters] })
+        .then((result) => {
+            console.log("result!", result);
+            // The result varies by RPC method.
+            // For example, this method will return a transaction hash hexadecimal string on success.
+        })
+        .catch((error) => {
+            console.log("error!");
+            // If the request fails, the Promise will reject with an error.
+        });
+
+        //await ethereum.request({ method: 'eth_signTransaction', params: [txParameters]})
+    }
+
+    // ----------------------------------------------------------------------
+
+    //onSubmit = async event => {
+        //event.preventDefault();
+
+    async function Contribute() {
+    
+        // create a campaign instance using the campaign address
+        const campaign = Campaign(this.props.address);
+
+        //this.setState({ loading: true, errorMessage: "" });
+    
+        // get the MetaMask account
+        try {
+          const accounts = await web3.eth.getAccounts();
+
+          // call the contribute method
+          await campaign.methods.contribute().send({
+            from: accounts[0],
+            // convert user form input to wei
+            value: web3.utils.toWei(this.state.value, "ether")
+          });
+          // just refreshes the page without adding to browser history (push)
+          // Router.replaceRoute(`/campaigns/${this.props.address}`);
+        } catch (err) {
+          // this.setState({ errorMessage: err.message });
+        }
+        // this.setState({ loading: false, value: "" });
+      //};
+    };
+
+      //--------------------------------------------------------------------------
+
+</script>
+{{end}}
+            

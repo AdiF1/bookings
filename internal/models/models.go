@@ -1,7 +1,10 @@
 package models
 
 import (
+	"math/big"
 	"time"
+
+	//"github.com/holiman/uint256"
 )
 
 // User is the user model
@@ -65,6 +68,7 @@ type RoomRestriction struct {
 	Reservation   Reservation
 	Restriction   Restriction
 }
+
 // MailData holds an email message
 type MailData struct {
 	To string
@@ -73,3 +77,20 @@ type MailData struct {
 	Content string
 	Template string
 }
+
+// TokenInfo holds ERC 20 info
+type TokenInfo struct {
+	Value *big.Float
+    Name string
+    Symbol string
+}
+
+type Request struct {
+    Description string
+    Value string
+    Address string
+    Complete bool
+    ApprovalCount uint
+    //mapping(address => bool) approvals;
+  }
+

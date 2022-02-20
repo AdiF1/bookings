@@ -1,0 +1,52 @@
+{{template "base" .}}
+
+{{define "content"}}
+
+{{$account := index .Data "eth-account"}}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2 class="mt-4">MetaMask Info</h2>
+<div>Account: {{$account}}</div>
+
+<a href="#" onclick="Transact({{$account}})">Transact</a>
+           
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "js"}}
+
+<script>
+    async function Transact(fromAccount) {
+        console.log(fromAccount);
+        var txParameters = {
+            nonce: '0x00',
+            to: '0x4Cd481B57B13C14988498BfF28974eAC919e3862',
+            from: fromAccount,
+            value: '2000000', // 2441406250
+            chainID: '0x3',
+            //gas: '30400', // 30400
+            //gasPrice: '10000000000000', // 10000000000000
+            
+            //data: ""
+        };
+
+        await ethereum.request({ method: 'eth_sendTransaction', params: [txParameters] })
+        .then((result) => {
+            console.log("result!");
+            // The result varies by RPC method.
+            // For example, this method will return a transaction hash hexadecimal string on success.
+        })
+        .catch((error) => {
+            console.log("error!");
+            // If the request fails, the Promise will reject with an error.
+        });
+    }
+
+</script>
+{{end}}
+            
+

@@ -20,7 +20,7 @@ func routes (app *config.AppConfig) http.Handler {
 	mux.Use(SessionLoad)
 
 	mux.Get("/", handlers.Repo.Home)
-	mux.Get("/about", handlers.Repo.About)
+	mux.Get("/smallchange", handlers.Repo.Smallchange)
 	mux.Get("/esthers", handlers.Repo.Esthers)
 	mux.Get("/sanctuary", handlers.Repo.Sanctuary)
 
@@ -53,6 +53,8 @@ func routes (app *config.AppConfig) http.Handler {
 		mux.Get("/reservations/{src}/{id}/show", handlers.Repo.AdminShowReservation)
 		mux.Post("/reservations/{src}/{id}", handlers.Repo.AdminPostShowReservation)
 	})
+
+	mux.Post("/smallchange", handlers.Repo.PostSmallchange)
 
 
 

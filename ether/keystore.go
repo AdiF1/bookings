@@ -12,7 +12,7 @@ import (
 // A keystore is a file containing an encrypted wallet private key. Keystores in go-ethereum 
 // can only contain one wallet key pair per file. To generate keystores first you must invoke 
 // NewKeyStore giving it the directory path to save the keystores
-func createKs() {
+func CreateKs() {
     ks := keystore.NewKeyStore("./tmp", keystore.StandardScryptN, keystore.StandardScryptP)
     password := "secret"
 
@@ -26,7 +26,7 @@ func createKs() {
     fmt.Println("Keystore account address:", account.Address.Hex())
 }
 
-func importKs() {
+func ImportKs() {
     file := "./tmp/UTC--2018-07-04T09-58-30.122808598Z--20f8d42fb0f667f2e53930fed426f225752453b3"
     ks := keystore.NewKeyStore("./tmp", keystore.StandardScryptN, keystore.StandardScryptP)
     jsonBytes, err := ioutil.ReadFile(file)
@@ -47,7 +47,7 @@ func importKs() {
     }
 }
 
-func createKeystore() {
-    createKs()
+func CreateKeystore() {
+    CreateKs()
     //importKs()
 }

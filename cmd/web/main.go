@@ -17,7 +17,7 @@ import (
 	"github.com/AdiF1/solidity/bookings/internal/models"
 	"github.com/AdiF1/solidity/bookings/internal/render"
 	"github.com/alexedwards/scs/v2"
-	"github.com/ethereum/go-ethereum/accounts/keystore"
+	//"github.com/ethereum/go-ethereum/accounts/keystore"
 	//"golang.org/x/crypto/bcrypt"
 )
 
@@ -35,15 +35,45 @@ func main() {
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
 	log.Println(string(hashedPassword)) */
 
-	//etherNet()
-	//etherAddress()
+	//ether.EtherNet()
+	//ether.EtherAddress()
+	ether.EtherAccountBalances()
+	//ether.GenerateWallet()
+	//ether.CreateKs()
+	//ether.Address_check()
+	//ether.GetBlockInfo()
+	//ether.GetTransactions()
+	//ether.TransferEther()
+	//ether.TransferTokens()
+	//ether.BlockSubscribe()
+	//ether.TransactionRawCreate()
+	//ether.TransactionRawSend()
 
+	//ether.ContractDeploy()
+	//ether.ContractLoad()
+	//ether.ContractQuery()
+	//ether.ContractWrite()
+	//ether.ContractBytecode()
+
+//ether.BaseCampaignDeploy()
+
+	//ether.BaseCampaignCreator()
+	//ether.BaseCampaignMinimumContribution()
+
+//ether.BaseCampaignContribute()
 	
-	//account_balance.etherAccountBalances()
-	//generateWallet()
+	//ether.BaseCampaignBalance()
+
+//ether.BaseCampaignSetRequest()
+//ether.BaseCampaignGetRequest()
+
+//ether.BaseCampaignApproveRequest()
+//ether.BaseCampaignFinalizeRequest()
+	//ether.SignatureVerify()
+	//ether.CheckIt()
 	
-	//createKs() 
-	//address_check()
+	//token := ether.ContractReadERC20()
+	//fmt.Println(token.Symbol)
 
 	db, err := run()
 	if err != nil {
@@ -55,7 +85,7 @@ func main() {
 	defer close(app.MailChan)
 	fmt.Println("Starting mail listener...")
 	listenForMail()
-	fmt.Println(fmt.Sprintf("Starting application on port %s", portNumber))
+	fmt.Println(fmt.Printf("Starting application on port %s", portNumber))
 
 	srv := &http.Server{
 		Addr:    portNumber,
@@ -121,7 +151,7 @@ func run() (*driver.DB, error) {
 	// connect to database
 	connectionString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=%s", 
 									*dbHost, *dbPort, *dbName, *dbUser, *dbPass, *dbSSL)
-	log.Println("Connecting to database...")
+	log.Println("\n\nConnecting to database...")
 	db, err := driver.ConnectSQL(connectionString)
 	if err != nil {
 		log.Fatal("Cannot connect to database! Dying...")
@@ -228,7 +258,11 @@ import conf.d/*.conf
 
 sudo tail -f /var/log/syslog
 
+/ solc --optimize --abi ./contracts/Store.sol -o build --overwrite
+// solc --optimize --bin ./contracts/Store.sol -o build 
+// abigen --abi=./build/MyStore.abi --bin=./build/MyStore.bin --pkg=Store --out=./contracts/Store.go
 
+// solc-select use 0.6.12 
 
 /* 	smallCHANGE 
 

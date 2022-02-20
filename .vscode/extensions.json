@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "remixproject.ethereum-remix"
+    ]
+}
+{
+    "name": "dev-plugin",
+    "displayName": "Remix Plugin",
+    "methods": [],
+    "version": "0.0.1-dev",
+    "url": "http://localhost:3000",
+    "description": "A great plugin for the Remix project",
+    "icon": "https://raw.githubusercontent.com/protofire/solhint/master/solhint-icon.png",
+    "location": "sidePanel"
+  }

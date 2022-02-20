@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"log"
 	"github.com/ethereum/go-ethereum/ethclient"
-
 )
 
 
-func etherNet() (infuraClient, ganacheClient *ethclient.Client){
+func EtherNet() (infuraClient, ganacheClient *ethclient.Client){
 
 	infuraClient, err := ethclient.Dial("https://mainnet.infura.io") 
 	if err != nil {

@@ -1,0 +1,126 @@
+<html>  
+    <head>
+        <meta charset="utf-8"/>
+        <script src="wasm_exec.js"></script>
+        <script>
+
+            //const Web3 = require('web3');
+            const go = new Go();
+            WebAssembly.instantiateStreaming(fetch("balances.wasm"), go.importObject).then((result) => {
+                go.run(result.instance);
+                //alert(this.window.CryptoKey)
+            });
+        </script>
+    </head>
+    <body>
+         <textarea id="some_input" name="some_input" cols="80" rows="20"></textarea>
+         <ul>
+            <li><input id="button" type="submit" name="button" value="Test" onclick="js_testBalance(some_input.value)"/></li>
+            <li><input id="button" type="submit" name="button" value="Accounts" onclick="js_accounts(some_input.value)"/></li>
+            <li><input id="button" type="submit" name="button" value="Swap" onclick="js_swap(some_input.value)"/></li>
+            <li><input id="button" type="submit" name="button" value="Skinny Bal" onclick="js_skinnyBal(some_input.value)"/></li>
+        <li><input id="button" type="submit" name="button" value="Skinny Con" onclick="js_skinnyCon(some_input.value)"/></li> 
+        <li><input id="button" type="submit" name="button" value="MetaMask" onclick="onInit2()"/></li>    
+   
+        </ul>
+         <textarea id="someoutput" name="someoutput" cols="80" rows="20"></textarea>
+    </body>
+    <script>
+
+        if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+
+            async function onInit() {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                Account = accounts[0];
+                console.log(accounts[0]);
+                console.log(accounts[0].ethereum)
+                //document.getElementById("myText").innerHTML = accounts[0];
+                //document.getElementById("current_eth_account").value = accounts[0];
+    
+                window.ethereum.on('accountsChanged', function (accounts) {
+                    console.log(accounts[0]);
+                    //document.getElementById("myText").innerHTML = accounts[0];
+                    //document.getElementById("current_eth_account").value = accounts[0];
+                });
+            }
+            onInit();
+        } else {
+            console.log("no MetaMask detected");
+            alert("Unfortunately you will not be able to interact with the Ethereum Blockchain as no MetaMask exists with your browser.\n\nPlease try using Chrome or Opera with the MetaMask extension.");
+        }
+
+        async function onInit2() {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            Account = accounts[0];
+            console.log(accounts[0]);
+            //document.getElementById("myText").innerHTML = accounts[0];
+            //document.getElementById("current_eth_account").value = accounts[0];
+
+            window.ethereum.on('accountsChanged', function (accounts) {
+                console.log(accounts[0]);
+                //document.getElementById("myText").innerHTML = accounts[0];
+                //document.getElementById("current_eth_account").value = accounts[0];
+            });
+        }
+
+        function js_testBalance(input) {
+            alert("1")
+            var result =  testBalance(input)
+               if (( result != null) && ('error' in result)) {
+                   console.log("Go return value", result)
+                   some_output.value = ""
+                   alert(result.error)
+               }
+               //return result
+       }
+        function js_accounts(input) {
+            alert("2")
+            var result = accounts(input)
+            if (( result != null) && ('error' in result)) {
+                console.log("Go return value", result)
+                someoutput.value = ""
+                alert(result.error)
+            }
+            //return result
+        }
+
+        function js_swap(input) {
+            alert("3")
+            
+            var result = swap(input)
+            if (( result != null) && ('error' in result)) {
+                console.log("Go return value", result)
+                someoutput.value = ""
+                alert(result.error)
+            }
+            //return result
+        }
+
+        function js_skinnyBal(input) {
+            alert("4")
+            var result = skinnyBal(input)
+            if (( result != null) && ('error' in result)) {
+                console.log("Go return value", result)
+                someoutput.value = ""
+                alert(result.error)
+            }
+            //return result
+        }
+
+        function js_skinnyCon(input) {
+            alert("5")
+            const accounts = window.ethereum.request({ method: 'eth_requestAccounts' });
+            Account = accounts[0];
+            console.log(accounts[0]);
+            var result = skinnyCon(input)
+            if (( result != null) && ('error' in result)) {
+                console.log("Go return value", result)
+                someoutput.value = ""
+                alert(result.error)
+            }
+            //return result
+        }
+
+
+   </script>
+</html>  
